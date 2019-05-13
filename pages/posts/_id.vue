@@ -4,28 +4,36 @@
       <h1 class="title">
         {{ post.title }}
       </h1>
-      <p>{{ post.content }}</p>
+      <p>{{ post.body }}</p>
     </article>
   </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      id: this.$route.params.id
+    }
+  },
+  computed: {
+    post() {
+      return this.$store.state.posts.all.find(post => post.id === Number(this.id))
+    }
+  },
   head() {
     return {
       title: this.post.title,
       meta: [
         { name: 'twitter:title', content: this.post.title },
-        { name: 'twitter:description', content: this.post.content },
+        { name: 'twitter:description', content: this.post.body },
         { name: 'twitter:image', content: 'https://i.imgur.com/UYP2umJ.png' },
         { name: 'twitter:card', content: 'summary_large_image' }
       ]
     }
   },
-  data() {
-    return {
-      id: this.$route.params.id
-    }
+  async fetch({ store, params }) {
+    await store.dispatch('posts/fetchPost', params.id)
   }
 }
 </script>

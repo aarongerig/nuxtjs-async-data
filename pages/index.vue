@@ -29,6 +29,11 @@ export default {
   components: {
     Logo
   },
+  computed: {
+    posts() {
+      return this.$store.state.posts.all
+    }
+  },
   head() {
     return {
       title: 'Home Page 🍕',
@@ -39,6 +44,9 @@ export default {
         { name: 'twitter:card', content: 'summary_large_image' }
       ]
     }
+  },
+  async fetch({ store }) {
+    await store.dispatch('posts/fetchAllPosts')
   }
 }
 </script>
